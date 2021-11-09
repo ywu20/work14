@@ -3,13 +3,16 @@
 #include<signal.h>
 #include<fcntl.h>
 #include<stdlib.h>
+#include<errno.h>
+#include<string.h>
 
 
 void sigint_handle(){
- int fd = open("log.txt", O_CREAT|O_APPEND,0644);
- char str[100] = "program exited due to SIGINT.\n";
- int a = write(fd,str,100);
+ int fd = open("log.txt", O_CREAT|O_APPEND|O_WRONLY,0644);
+ char str[] = "program exited due to SIGINT.\n";
+ int a = write(fd,str,sizeof(str));
  printf("bytes written: %d\n",a);
+ printf("errno: %s\n", strerror(errno));
  close (fd);
  exit(SIGINT);
 }
